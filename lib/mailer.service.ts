@@ -15,9 +15,9 @@ import type {
 import type { MailModuleOptions } from './interfaces/mail-module-options.interface.js';
 import { MAIL_MODULE_OPTIONS } from './mail.module-definition.js';
 import { parseAddress, parseAddressList } from './message/address.util.js';
-import { checkHeaderName, checkHeaderValue, mergeHeaders } from './message/headers.util.js';
+import { mergeHeaders } from './message/headers.util.js';
 import type { MailMessage } from './message/mail-message.js';
-import { assertRecipients, createMailMessage, type NormalizeInput } from './message/normalize.util.js';
+import { assertRecipients, checkHeaders, createMailMessage, type NormalizeInput } from './message/normalize.util.js';
 import type { MailContent, MailRecipients, MailTemplateContent } from './interfaces/mail-message.interface.js';
 import { MailTemplateEngine } from './templates/mail-template.engine.js';
 import { type ResolvedRetry, resolveRetry, retryDelay, sleep } from './utils/retry.util.js';
@@ -328,10 +328,7 @@ function checkDefaults(options: MailModuleOptions): void {
       parseAddress(options.from, 'from');
     }
     parseAddressList(options.replyTo, 'replyTo');
-    for (const [name, value] of Object.entries(options.headers ?? {})) {
-      checkHeaderName(name, `headers.${name}`);
-      checkHeaderValue(value, `headers.${name}`);
-    }
+    checkHeaders(options.headers ?? {});
   } catch (error) {
     throw prefix(error);
   }
