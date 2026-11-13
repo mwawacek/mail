@@ -63,7 +63,8 @@ export function htmlToText(source: string): string {
   text = text
     .replace(/<br\b[^>]*>/gi, '\n')
     .replace(/<hr\b[^>]*>/gi, '\n\n----\n\n')
-    .replace(/<li\b[^>]*>/gi, '\n- ')
+    // A paragraph or div that opens the item stays on the bullet's line
+    .replace(/<li\b[^>]*>(?:\s*<(?:p|div)\b[^>]*>)*/gi, '\n- ')
     .replace(/<\/tr\s*>/gi, '\n')
     .replace(/<\/t[dh]\s*>/gi, ' ')
     .replace(BLOCK_END, '\n\n')

@@ -75,6 +75,11 @@ describe('htmlToText()', () => {
     expect(htmlToText('<div>one<br>two</div><hr><p>three</p><p></p><p></p><p>four</p>')).toBe('one\ntwo\n\n----\n\nthree\n\nfour');
   });
 
+  it('keeps a list item on its bullet line when it starts with a paragraph or div', () => {
+    expect(htmlToText('<ul>\n<li><p>One</p>\n</li>\n<li><p>Two</p>\n</li>\n</ul>')).toBe('- One\n\n- Two');
+    expect(htmlToText('<ol><li><div class="x"><p>Nested</p></div></li></ol>')).toBe('- Nested');
+  });
+
   it('turns a br with attributes into a line break too', () => {
     expect(htmlToText('<p>Hi Ada,<br class="x">your order<br style="line-height:0" />shipped</p>')).toBe(
       'Hi Ada,\nyour order\nshipped',
